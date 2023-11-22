@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/audre/OneDrive/Documents/Projet_300263639",
-      "program": "c:/Users/audre/OneDrive/Documents/Projet_300263639/build/Debug/outDebug",
+      "cwd": "c:/Users/audre/OneDrive/Documents/Projet_300263639/Project-of-CSI-2772",
+      "program": "c:/Users/audre/OneDrive/Documents/Projet_300263639/Project-of-CSI-2772/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

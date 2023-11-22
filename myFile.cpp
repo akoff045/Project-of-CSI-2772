@@ -7,6 +7,7 @@
 #include "Coins.h"
 #include "Hand.h"
 #include "Player.h"
+#include "CardFactory.h"
 #include <iostream>
 #include <string>
 #include <iomanip>

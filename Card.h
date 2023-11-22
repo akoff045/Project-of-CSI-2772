@@ -193,7 +193,7 @@ public:
 class Red : public Card {
 public:
     int getCardsPerCoin(int coins) const override {
-        const int coinsPerCard[] = {0, 0, 2, 3, 0}; // Tableau contenant les différents nombres de cartes à un index qui correspond au nombre de pièces
+        const int coinsPerCard[] = {0, 2, 3, 4, 5}; // Tableau contenant les différents nombres de cartes à un index qui correspond au nombre de pièces
         const int maxCoins = 4; // Nombre maximum de pièces de monnaie pouvant être attribuées
         
         if (coins <= 0) {
@@ -222,12 +222,24 @@ public:
 class garden: public Card {
 public:
     int getCardsPerCoin(int coins) const override {
-        // Implémenter la logique pour Blue
-        // Retourner le nombre de cartes nécessaires pour obtenir les pièces
+        const int coinsPerCard[] = {0, 0, 2, 3, 0}; // Tableau contenant les différents nombres de cartes à un index qui correspond au nombre de pièces
+        const int maxCoins = 4; // Nombre maximum de pièces de monnaie pouvant être attribuées
+        
+        if (coins <= 0) {
+        return 0;       // On écarte le cas négatif  
+        }else if (coins > maxCoins) {
+
+        return coinsPerCard[maxCoins]; // On retourne le nombre de cartes pour le nombre maximal de pièces 
+         } 
+         
+         else {
+
+        return coinsPerCard[coins]; // Renvoie le nombre de cartes pour le nombre spécifique de pièces
+         }
     }
 
     std::string getName() const override {
-        return "garden"; // Retourne le nom complet de Rgarden
+        return "garden"; // Retourne le nom complet de garden
     }
 
     void print(std::ostream& out) const override {
