@@ -51,7 +51,6 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Table& table) {
-        // Print information about the table, including players, discard pile, and trade area
         os << "Player 1: " << table.player1 << std::endl;
         os << "Player 2: " << table.player2 << std::endl;
         os << "Discard Pile: " << table.discardPile << std::endl;
