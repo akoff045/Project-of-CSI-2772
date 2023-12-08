@@ -1,3 +1,6 @@
+//Audrey Koffi-300263639
+//Tamer Verir-300177023
+
 #include <iostream>
 #include <list>
 #include <string>

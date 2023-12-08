@@ -1,56 +1,91 @@
+//Audrey Koffi-300263639
+//Tamer Verir-300177023
+
 #include <iostream>
-#include <ostream>
-#include <istream>
 #include <vector>
-# include "Card.h"
+#include <stdexcept>
 #include "Chain.h"
-#include "Deck.h"
-#include "DiscardPile.h"
-#include "Table.h"
-#include "TradeArea.h"
-#include "Coins.h"
-#include "Hand.h" 
 
+class Player {
+private:
+    std::string name;// Nom du joueur
+    int coins;// Coins du joueur
+    std::vector<Chain_Base*> chains;//Vecteur qui store la chaîne du joueur 
 
- Player: public std  {
-    public: 
-    Player(std::string&){
-
+public:
+    Player(const std::string& playerName) : name(playerName), coins(0) { // Créé un objet joueur avec un nom et 2 chaînes par défaut 
+        
+        chains.push_back(new Chain<Blue>());
+        chains.push_back(new Chain<Green>());
     }
-    std :string getName();
-    int getNumCoins() ;
-    Player& operator+=(int );
-    int getMaxNumChains();
-    Chain& operator[](int i);
-    void buyThirdChain();
-    void buyThirdChain();
-    void printHand(std::ostream&, bool);
-    Player(istream&, const CardFactory* );
 
-
+    Player(std::istream& is, const CardFactory* factory) {  // Créé un objet joueur à partir d'un istream
+        // Code à compléter...................................................
     }
-    // La classe Player aura les fonctions suivantes :
-// - Player( std::string& ) constructeur qui crée un objet de type Player avec un nom
-// donné.
-// - std:string getName() obtenir le nom du joueur.
-// - int getNumCoins() obtenir le nombre de pièces actuellement détenues par le joueur.
-// - Player& operator+=(int ) ajoute un nombre de pièces
-// - int getMaxNumChains()renvoie 2 ou 3.
-// - int getNumChains()renvoie le nombre de chaînes non nulles.
-// - Chain& operator[](int i) renvoie la chaîne en position i.
-// - void buyThirdChain()ajoute une troisième chaîne vide au joueur pour deux pièces. La
-// fonction réduit le nombre de pièces par deux pour le joueur. Si le joueur n'a pas suffisamment de
-// pièces alors une exception NotEnoughCoins est soulevée.
-// - void printHand(std::ostream&, bool) affiche la première carte de la main du
-// joueur (avec l'argument False) ou l'ensemble de la main du joueur (avec l'argument True) dans le
-// flux correspondant ostream.
-// - Ajouter également l'opérateur d'insertion pour afficher un joueur (Player) dans
-// std::ostream. Le nom du joueur, le nombre de pièces que possède le joueur et chacune des
-// chaînes (2 ou 3, certaines peuvent être vides) doivent être affichés. Hand est affichée à l’aide
-// d’une autre fonction. L'affichage du joueur peut se présenter comme suit :
-// Dave 3 coins
-// Red R R R R
-// Blue B
-// - Player possède un constructeur qui accepte un flux istream et construit un objet de type
-// Player à partir du fichier :
-// Player(istream&, const CardFactory* );
+
+    std::string getName() const {//Retourne le nom du joueur
+        return name;
+    }
+
+    int getNumCoins() const {// Renvoie le nombre de pièces actuellement détenues par le joueur
+        return coins;
+    }
+
+    Player& operator+=(int numCoins) {// Ajoute des coins à un joueur 
+        coins += numCoins;
+        return *this;
+    }
+
+    int getMaxNumChains() const { // Retourne le nombre maximum de chaîne possible pour un joueur
+        return 3;
+    }
+
+    int getNumChains() const {//Retourne le nombre actuel de chaîne d'un joueur
+        return chains.size();
+    }
+
+    Chain_Base& operator[](int i) const {//Retourne une chaîne se trouvant à un index spécifique 
+        if (i < 0 || i >= chains.size()) {
+            throw std::out_of_range("Invalid chain index");
+        }
+        return *chains[i];
+    }
+
+    void buyThirdChain() {
+        if (coins < 2) {//On vérifie d'abord si le joueur possède assez de coins pour acheter une 3ème chaîne
+            throw std::runtime_error("Not enough coins to buy a third chain");// Quand il n'en a pas assez, on renvoie un message d'erreur
+        }
+
+        coins -= 2;//Quand il en a assez on lui en prend 2 et on ajoute ensuite une chaîne à ses chaînes existantes
+        chains.push_back(new Chain<Red>());
+    }
+
+    void printHand(std::ostream& out, bool showAll) const {
+        out << name << " " << coins << " coins" << std::endl; // Affcihe le nom du joueur ainsi que le nombre de coins qu'il possède
+
+        if (showAll) {//On vérifie si toutes les chaînes peuvent être montrées
+            for (const auto& chain : chains) {//On affiche toutes les chaînes avce une loop for 
+                out << *chain << " ";
+            }
+        } else {// Si toutes les chaînes ne sont pas à afficher, on vérifie si il y a au moins chaîne et on imprime sa valeur en coins sans afficher son contenu
+            if (!chains.empty()) {
+                out << chains[0]->sell() << " ";
+            }
+        }
+        out << std::endl;
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const Player& player) {//On affiche la main du joueur en utilisant la méthode printHand()
+        player.printHand(out, true);
+        return out;
+    }
+
+    
+
+    ~Player() {//Destructeur
+        for (auto& chain : chains) {
+            delete chain;
+        }
+    }
+};
+
